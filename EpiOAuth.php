@@ -267,6 +267,15 @@ class EpiOAuth
     // php's curl extension automatically sets the content type
     // based on whether the params are in string or array form
     if($isMultipart)
+      /**
+       * this is a work around for https://github.com/jmathai/twitter-async/issues/186
+       * DO NOT REMOVE.
+       *
+       * Please sync code from fork https://github.com/revinate/twitter-async
+       */
+      if (isset($params['request']['status'])) {
+          $params['request']['status'] = urldecode($params['request']['status']);
+      }
       curl_setopt($ch, CURLOPT_POSTFIELDS, $params['request']);
     else
       curl_setopt($ch, CURLOPT_POSTFIELDS, $this->buildHttpQueryRaw($params['request']));
